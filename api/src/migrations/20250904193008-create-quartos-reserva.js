@@ -22,6 +22,7 @@ module.exports = {
       number_of_days: Sequelize.INTEGER,
       checkin_date: Sequelize.DATEONLY,
       checkout_date: Sequelize.DATEONLY,
+      category_name: Sequelize.STRING,
       created_at: Sequelize.DATE,
       updated_at: Sequelize.DATE
     });

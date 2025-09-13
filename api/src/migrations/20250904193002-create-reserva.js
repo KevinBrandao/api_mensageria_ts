@@ -23,6 +23,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
+      indexed_at: Sequelize.DATE,
       updated_at: Sequelize.DATE
     });
   },

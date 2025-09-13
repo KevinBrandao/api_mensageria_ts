@@ -59,4 +59,11 @@ export class QuartoReserva extends Model {
   @UpdatedAt
   @Column({ field: 'updated_at' })
   declare updatedAt: Date;
+
+  toJSON() {
+    const values = Object.assign({}, this.get());
+    values.category = { name: values.category_name };
+    delete values.category_name;
+    return values;
+  }
 }

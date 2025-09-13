@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ReservaService } from './reserva.service';
 import { Reserva } from '../models/reserva.model';
 
-@Controller('reservas')
+@Controller('reserves')
 export class ReservaController {
   constructor(private readonly reservaService: ReservaService) {}
 

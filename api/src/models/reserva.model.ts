@@ -43,12 +43,23 @@ export class Reserva extends Model {
   @HasMany(() => Pagamento)
   pagamentos: Pagamento[];
 
-  @CreatedAt
   @Column({ field: 'created_at' })
   declare createdAt: Date;
 
+  @Column({ field: 'indexed_at' })
+  declare indexedAt: Date;
+
   @UpdatedAt
-  @Column({ field: 'updated_at' })
+  @Column({ field: 'indexed_at' })
   declare updatedAt: Date;
 
+  toJSON() {
+    const values = Object.assign({}, this.get());
+    if (values.quartos_reservados) {
+      values.quartos_reservados = values.quartos_reservados.map((q: QuartoReserva) =>
+        typeof q.toJSON === 'function' ? q.toJSON() : q
+      );
+    }
+    return values;
+  }
 }
