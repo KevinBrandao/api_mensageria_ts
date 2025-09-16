@@ -33,7 +33,7 @@ export class QuartoReserva extends Model {
 
   @Column
   checkout_date: Date;
- 
+
   @Column
   category_name: String;
 
@@ -62,6 +62,7 @@ export class QuartoReserva extends Model {
 
   toJSON() {
     const values = Object.assign({}, this.get());
+    values.total = values.daily_rate * values.number_of_days;
     values.category = { name: values.category_name };
     delete values.category_name;
     return values;

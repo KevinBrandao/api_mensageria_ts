@@ -2,8 +2,6 @@ import { ConfigService } from '@nestjs/config';
 import { SequelizeModuleOptions } from '@nestjs/sequelize';
 
 export const getSequelizeConfig = (configService: ConfigService): SequelizeModuleOptions => {
-  console.log('DB_PASSWORD ->', configService.get<string>('DB_PASSWORD'));
-  console.log('Tipo:', typeof configService.get<string>('DB_PASSWORD'));
 
   return {
     dialect: 'postgres',

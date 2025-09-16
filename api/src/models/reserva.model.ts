@@ -55,11 +55,18 @@ export class Reserva extends Model {
 
   toJSON() {
     const values = Object.assign({}, this.get());
+
     if (values.quartos_reservados) {
       values.quartos_reservados = values.quartos_reservados.map((q: QuartoReserva) =>
         typeof q.toJSON === 'function' ? q.toJSON() : q
       );
+      values.total = values.quartos_reservados.reduce((sum: number, quarto: any) => {
+        return sum + (quarto.total || 0);
+      }, 0);
+    } else {
+      values.total = 0;
     }
     return values;
   }
+
 }

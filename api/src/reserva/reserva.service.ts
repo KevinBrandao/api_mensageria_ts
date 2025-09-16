@@ -9,17 +9,47 @@ import { Pagamento } from '../models/pagamento.model';
 @Injectable()
 export class ReservaService {
   constructor(
-    @InjectModel(Reserva) private reservaModel: typeof Reserva
-  ) {}
+    @InjectModel(Reserva) private reservaModel: typeof Reserva,
+  ) { }
 
-  async findAll(): Promise<Reserva[]> {
+  async findAll(filters: {
+    uuid?: string;
+    customerId?: number;
+    hotelId?: number;
+    roomId?: number;
+  }): Promise<Reserva[]> {
+    const whereClause: any = {};
+
+    if (filters.uuid) whereClause.uuid = filters.uuid;
+    if (filters.customerId) whereClause.customer_id = filters.customerId;
+    if (filters.hotelId) whereClause.hotel_id = filters.hotelId;
+
+    const includeClause: any = [
+      { model: Cliente, required: false },
+      { model: Hotel, required: false },
+      { model: Pagamento, required: false },
+    ];
+
+    if (filters.roomId) {
+      includeClause.push({
+        model: QuartoReserva,
+        where: { id: filters.roomId },
+        required: true,
+      });
+    } else {
+      includeClause.push({
+        model: QuartoReserva,
+        required: false,
+      });
+    }
+
     return this.reservaModel.findAll({
-      include: [
-        { model: Cliente },
-        { model: Hotel },
-        { model: QuartoReserva },
-        { model: Pagamento }
-      ]
+      where: whereClause,
+      include: includeClause,
     });
   }
+
+
+
+
 }
