@@ -13,14 +13,12 @@ export class ReservaService {
   ) { }
 
   async findAll(filters: {
-    uuid?: string;
     customerId?: number;
     hotelId?: number;
     roomId?: number;
   }): Promise<Reserva[]> {
     const whereClause: any = {};
 
-    if (filters.uuid) whereClause.uuid = filters.uuid;
     if (filters.customerId) whereClause.customer_id = filters.customerId;
     if (filters.hotelId) whereClause.hotel_id = filters.hotelId;
 
@@ -49,7 +47,16 @@ export class ReservaService {
     });
   }
 
-
-
+  async findOne(uuid: string): Promise<Reserva | null> {
+    return this.reservaModel.findOne({
+      where: { uuid },
+      include: [
+        { model: Cliente, required: false },
+        { model: Hotel, required: false },
+        { model: QuartoReserva, required: false },
+        { model: Pagamento, required: false },
+      ],
+    });
+  }
 
 }

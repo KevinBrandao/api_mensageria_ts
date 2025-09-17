@@ -1,28 +1,54 @@
-import { Controller, Get, Query, ParseIntPipe, Optional } from '@nestjs/common';
+import { 
+  Controller, 
+  Get, 
+  Param, 
+  Query, 
+  ParseUUIDPipe
+} from '@nestjs/common';
 import { ReservaService } from './reserva.service';
 import { Reserva } from 'src/models/reserva.model';
 
+interface ReservaQueryParams {
+  customerId?: number;
+  hotelId?: number;
+  roomId?: number;
+  page?: number;
+  limit?: number;
+}
+
 @Controller('reserves')
 export class ReservaController {
-  constructor(private readonly reservaService: ReservaService) { }
+  constructor(private readonly reservaService: ReservaService) {}
 
+  // GET /reservas - Listar todas as reservas com filtros opcionais
   @Get()
-  async getAll(
-    @Query('uuid') uuid?: string,
-    @Query('customer_id') customerId?: string,
-    @Query('hotel_id') hotelId?: string,
-    @Query('room_id') roomId?: string,
+  async findAll(
+    @Query('customerId') customerId?: string,
+    @Query('hotelId') hotelId?: string,
+    @Query('roomId') roomId?: string,
   ): Promise<Reserva[]> {
-    // Converte para número ou undefined, se for string vazia ou inválida
-    const customerIdNum = customerId ? Number(customerId) : undefined;
-    const hotelIdNum = hotelId ? Number(hotelId) : undefined;
-    const roomIdNum = roomId ? Number(roomId) : undefined;
+    const filters: ReservaQueryParams = {};
 
-    return this.reservaService.findAll({
-      uuid,
-      customerId: customerIdNum,
-      hotelId: hotelIdNum,
-      roomId: roomIdNum,
-    });
+    if (customerId && !isNaN(Number(customerId))) {
+      filters.customerId = Number(customerId);
+    }
+    
+    if (hotelId && !isNaN(Number(hotelId))) {
+      filters.hotelId = Number(hotelId);
+    }
+    
+    if (roomId && !isNaN(Number(roomId))) {
+      filters.roomId = Number(roomId);
+    }
+
+    return this.reservaService.findAll(filters);
+  }
+
+  // GET /reservas/:uuid - Buscar reserva específica por UUID
+  @Get(':uuid')
+  async findOne(
+    @Param('uuid', ParseUUIDPipe) uuid: string
+  ): Promise<Reserva | null> {
+    return this.reservaService.findOne(uuid);
   }
 }
