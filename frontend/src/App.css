@@ -1,0 +1,8 @@
+body {
+  background-color: #f4f6f8; /* Cor de fundo suave */
+}
+
+/* Adiciona um espaçamento no topo da área principal */
+.main-content {
+  padding-top: 24px;
+}
