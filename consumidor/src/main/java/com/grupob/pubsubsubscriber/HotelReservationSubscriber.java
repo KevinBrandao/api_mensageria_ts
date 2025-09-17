@@ -51,7 +51,7 @@ public class HotelReservationSubscriber {
                 reservationService.processReservationMessage(messagePayload);
                 
                 // Confirmar processamento
-                // consumer.ack();
+                consumer.ack();
                 logger.info("Mensagem {} processada com sucesso", message.getMessageId());
                 
             } catch (Exception e) {
