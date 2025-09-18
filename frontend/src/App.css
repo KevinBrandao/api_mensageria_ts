@@ -1,8 +1,7 @@
 body {
-  background-color: #f4f6f8; /* Cor de fundo suave */
+  background-color: #e6e9ec; /* Tom de cinza claro */
 }
 
-/* Adiciona um espaçamento no topo da área principal */
 .main-content {
-  padding-top: 24px;
+  padding: 20px; /* Adiciona um espaçamento geral na área principal */
 }

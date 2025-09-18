@@ -5,7 +5,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Box, // Box é usado para layout
 } from '@mui/material';
 import './App.css';
 
@@ -13,14 +12,15 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <AppBar position="relative" sx={{ backgroundColor: '#fff', color: '#1a2027' }}>
+      <AppBar position="relative" sx={{ backgroundColor: '#1976d2 ', color: '#1a2027', width:'100%' }}>
         <Toolbar>
           <img src="/bukin.png" alt="Bukin Logo" style={{ height: '40px', marginRight: '16px' }} />
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            Dashboard de Reservas
+          <Typography paddingLeft="40px" variant="h6" color="#fff" noWrap sx={{ flexGrow: 1 }}>
+               Dashboard de Reservas
           </Typography>
         </Toolbar>
       </AppBar>
+      {/* Aplicando a classe para espaçamento */}
       <main className="main-content">
         <ReservationList />
       </main>

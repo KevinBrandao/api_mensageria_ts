@@ -56,7 +56,7 @@ const ReservationList = () => {
   }, [reservas, searchTerm]); // Recalcula o filtro apenas quando as reservas ou o termo de busca mudam
 
   return (
-    <Container sx={{ py: 4 }}>
+    <Container sx={{ py: 4 }} maxWidth="xl">
       <TextField
         fullWidth
         label="Buscar por Nome do Cliente ou Nº da Reserva"
