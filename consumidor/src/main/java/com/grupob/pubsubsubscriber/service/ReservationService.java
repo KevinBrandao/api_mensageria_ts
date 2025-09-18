@@ -1,9 +1,15 @@
 package com.grupob.pubsubsubscriber.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.grupob.pubsubsubscriber.exception.DuplicateUuidException;
 import com.grupob.pubsubsubscriber.model.ReservationData;
 import com.grupob.pubsubsubscriber.repository.ReservationRepository;
+
+import java.sql.SQLException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +24,7 @@ public class ReservationService {
         this.repository = new ReservationRepository();
     }
     
-    public void processReservationMessage(String messagePayload) {
+    public void processReservationMessage(String messagePayload) throws DuplicateUuidException, JsonMappingException, JsonProcessingException {
         try {
             logger.info("Processando mensagem de reserva...");
             
@@ -37,9 +43,24 @@ public class ReservationService {
             
             logger.info("Reserva {} processada e salva com sucesso", reservation.getUuid());
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Erro ao processar mensagem de reserva: {}", e.getMessage(), e);
+            // Verificar se é erro de UUID duplicado
+            if (isDuplicateKeyError(e)) {
+                throw new DuplicateUuidException("UUID já existe no banco de dados", e);
+            }
             throw new RuntimeException("Falha no processamento da reserva", e);
         }
+    }
+    
+    private boolean isDuplicateKeyError(SQLException e) {
+        int errorCode = e.getErrorCode();
+        String sqlState = e.getSQLState();
+        
+        return errorCode == 1062 || // MySQL
+               errorCode == 23505 || // PostgreSQL  
+               errorCode == 2627 || // SQL Server
+               errorCode == 1 || // Oracle
+               (sqlState != null && sqlState.startsWith("23"));
     }
 }
