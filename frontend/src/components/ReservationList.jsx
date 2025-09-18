@@ -44,7 +44,7 @@ const ReservationList = () => {
     return reservas.filter((reserva) => {
       // Verifica se o nome do cliente existe e inclui o termo de busca (ignorando maiúsculas/minúsculas)
       const clientNameMatch =
-        reserva.cliente?.name
+        reserva.customer?.name
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ?? false;
       

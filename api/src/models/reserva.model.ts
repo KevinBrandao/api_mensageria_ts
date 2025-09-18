@@ -7,7 +7,7 @@ import {
   BelongsTo,
   HasMany,
   CreatedAt,
-  UpdatedAt
+  UpdatedAt,
 } from 'sequelize-typescript';
 import { Cliente } from './clientes.model';
 import { Hotel } from './hotel.model';
@@ -28,7 +28,7 @@ export class Reserva extends Model {
   customer_id: number;
 
   @BelongsTo(() => Cliente)
-  cliente: Cliente;
+  customer: Cliente;
 
   @ForeignKey(() => Hotel)
   @Column
@@ -38,10 +38,10 @@ export class Reserva extends Model {
   hotel: Hotel;
 
   @HasMany(() => QuartoReserva)
-  quartos_reservados: QuartoReserva[];
+  rooms: QuartoReserva[];
 
   @HasMany(() => Pagamento)
-  pagamentos: Pagamento[];
+  payment: Pagamento[];
 
   @Column({ field: 'created_at' })
   declare createdAt: Date;
@@ -57,16 +57,25 @@ export class Reserva extends Model {
     const values = Object.assign({}, this.get());
 
     if (values.quartos_reservados) {
-      values.quartos_reservados = values.quartos_reservados.map((q: QuartoReserva) =>
-        typeof q.toJSON === 'function' ? q.toJSON() : q
+      values.quartos_reservados = values.quartos_reservados.map(
+        (q: QuartoReserva) => (typeof q.toJSON === 'function' ? q.toJSON() : q),
       );
-      values.total = values.quartos_reservados.reduce((sum: number, quarto: any) => {
-        return sum + (quarto.total || 0);
-      }, 0);
+      values.total = values.quartos_reservados.reduce(
+        (sum: number, quarto: any) => {
+          return sum + (quarto.total || 0);
+        },
+        0,
+      );
     } else {
       values.total = 0;
     }
+
+    // Retornar apenas o primeiro pagamento
+    if (Array.isArray(values.payment) && values.payment.length > 0) {
+      values.payment = values.payment[0];
+    } else {
+      values.payment = null;
+    }
     return values;
   }
-
 }

@@ -22,17 +22,17 @@ import {
 } from '@mui/icons-material';
 
 const ReservationCard = ({ reserva }) => {
-  const { cliente, hotel, quartos_reservados, createdAt } = reserva;
+  const { customer, hotel, rooms, createdAt } = reserva;
   const [isExpanded, setIsExpanded] = useState(false); // Estado para controlar a expansão
 
   const totalReserva =
-    quartos_reservados?.reduce((sum, quarto) => sum + (quarto.total || 0), 0) || 0;
+    rooms?.reduce((sum, quarto) => sum + (quarto.total || 0), 0) || 0;
 
   const handleToggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const quartosVisiveis = isExpanded ? quartos_reservados : quartos_reservados.slice(0, 3);
+  const quartosVisiveis = isExpanded ? rooms : rooms.slice(0, 3);
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={2.4}>
@@ -90,7 +90,7 @@ const ReservationCard = ({ reserva }) => {
               <ListItemText
                 primary="Cliente"
                 secondaryTypographyProps={{ component: 'span', color: 'primary.main', fontWeight: '500' }}
-                secondary={cliente ? cliente.name : 'N/A'}
+                secondary={customer ? customer.name : 'N/A'}
               />
             </ListItem>
             <ListItem>
@@ -109,7 +109,7 @@ const ReservationCard = ({ reserva }) => {
             <Divider sx={{ my: 1, fontSize: '0.8rem' }}>QUARTOS</Divider>
             {/* Animação de expandir/recolher */}
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              {quartos_reservados.slice(3).map((quarto) => (
+              {rooms.slice(3).map((quarto) => (
                 <Box key={quarto.id} sx={{ mb: 1.5 }}>
                   <Typography variant="subtitle2" sx={{ display: 'flex', alignItems: 'center' }}>
                     <KingBed sx={{ fontSize: '1rem', mr: 1, color: 'text.secondary' }} />
@@ -122,7 +122,7 @@ const ReservationCard = ({ reserva }) => {
               ))}
             </Collapse>
             {/* Lista dos 3 primeiros quartos sempre visível */}
-            {quartos_reservados.slice(0, 3).map((quarto) => (
+            {rooms.slice(0, 3).map((quarto) => (
               <Box key={quarto.id} sx={{ mb: 1.5 }}>
                 <Typography variant="subtitle2" sx={{ display: 'flex', alignItems: 'center' }}>
                   <KingBed sx={{ fontSize: '1rem', mr: 1, color: 'text.secondary' }} />
@@ -135,9 +135,9 @@ const ReservationCard = ({ reserva }) => {
             ))}
 
             {/* Botão para expandir/recolher */}
-            {quartos_reservados.length > 3 && (
+            {rooms.length > 3 && (
               <Button onClick={handleToggleExpand} size="small" sx={{ mt: 1 }}>
-                {isExpanded ? 'Ver menos' : `Ver mais ${quartos_reservados.length - 3} quarto(s)`}
+                {isExpanded ? 'Ver menos' : `Ver mais ${rooms.length - 3} quarto(s)`}
               </Button>
             )}
           </Box>
