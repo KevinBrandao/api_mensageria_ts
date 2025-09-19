@@ -1,7 +1,24 @@
+/* frontend/src/App.css */
 body {
   background-color: #e6e9ec; /* Tom de cinza claro */
 }
 
 .main-content {
   padding: 20px; /* Adiciona um espaçamento geral na área principal */
+}
+
+/* Adiciona animação para o diálogo */
+.MuiDialog-paper {
+  animation: slide-in 0.3s ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

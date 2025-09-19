@@ -1,3 +1,4 @@
+// frontend/src/components/ReservationList.jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import ReservationCard from './ReservationCard';
 import {
@@ -11,13 +12,12 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 
 const ReservationList = () => {
-  const [reservas, setReservas] = useState([]); // Armazena a lista completa de reservas
+  const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(''); // Armazena o texto da busca
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Busca os dados da API apenas uma vez, quando o componente é montado
     const fetchReservas = async () => {
       try {
         const response = await fetch('http://localhost:3000/reserves');
@@ -34,26 +34,23 @@ const ReservationList = () => {
     };
 
     fetchReservas();
-  }, []); // O array vazio [] garante que isso rode apenas uma vez
+  }, []);
 
-  // Filtra a lista de reservas com base no searchTerm
   const filteredReservas = useMemo(() => {
     if (!searchTerm) {
-      return reservas; // Se não houver busca, retorna a lista completa
+      return reservas;
     }
     return reservas.filter((reserva) => {
-      // Verifica se o nome do cliente existe e inclui o termo de busca (ignorando maiúsculas/minúsculas)
       const clientNameMatch =
         reserva.customer?.name
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ?? false;
       
-      // Verifica se o UUID da reserva inclui o termo de busca
       const uuidMatch = reserva.uuid.toLowerCase().includes(searchTerm.toLowerCase());
 
       return clientNameMatch || uuidMatch;
     });
-  }, [reservas, searchTerm]); // Recalcula o filtro apenas quando as reservas ou o termo de busca mudam
+  }, [reservas, searchTerm]);
 
   return (
     <Container sx={{ py: 4 }} maxWidth="xl">

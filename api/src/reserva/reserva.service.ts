@@ -44,6 +44,7 @@ export class ReservaService {
     return this.reservaModel.findAll({
       where: whereClause,
       include: includeClause,
+      order: [['createdAt', 'DESC']],
     });
   }
 
